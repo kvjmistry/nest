@@ -26,9 +26,11 @@ NESTresult NESTcalc::FullCalculation(INTERACTION_TYPE species, double energy,
                                      const std::vector<double> &ERYieldsParam,
                                      bool do_times /*=true*/) {
   if (density < 1.) fdetector->set_inGas(true);
+  std::cout << "NESTcalc::FullCalculation() species desired is " << species << std::endl;
   NESTresult result;
   result.yields = GetYields(species, energy, density, dfield, A, Z,
                             NRYieldsParam, ERYieldsParam);
+  std::cout << "NESTcalc::FullCalculation() Nph, Nel: " << result.yields.PhotonYield << ", " << result.yields.ElectronYield << std::endl;
   result.quanta =
       GetQuanta(result.yields, density, NRERWidthsParam, false, -999.);
   if (do_times)
@@ -1081,6 +1083,7 @@ YieldResult NESTcalc::GetYieldBeta(double energy, double density,
          (QyLvllowE - QyLvlmedE) /
              pow(1. + 1.304 * pow(energy, 2.1393), 0.35535) +
          QyLvlhighE / (1. + DokeBirks * pow(energy, LET_power));
+    std::cout << "NESTcalc::GetYieldBeta() dfield, energy, Nq, Qy, Ne " << dfield << ", " << energy << ", " << Nq << ", " << Qy << ", " << Qy*energy << std::endl;
     if (Qy > QyLvllowE && energy > 1. && dfield > 1e4) Qy = QyLvllowE;
   }
 
