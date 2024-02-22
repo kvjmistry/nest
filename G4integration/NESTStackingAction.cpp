@@ -1,5 +1,5 @@
 #include "NESTStackingAction.hh"
-#include "G4OpticalPhoton.hh"
+#include "NESTS1Photon.hh"
 #include <iostream>
 
 NESTStackingAction::NESTStackingAction() {}
@@ -11,7 +11,7 @@ G4StackManager* NESTStackingAction::savedManager = 0;
 G4ClassificationOfNewTrack NESTStackingAction::ClassifyNewTrack(
     const G4Track* track) {
   savedManager = stackManager;
-  if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
+  if (track->GetDefinition() == NESTS1Photon::OpticalPhotonDefinition()) {
     return fWaiting;
   }
   return fUrgent;

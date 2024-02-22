@@ -159,8 +159,9 @@ class NESTProc : public G4VRestDiscreteProcess {
 inline G4bool NESTProc::IsApplicable(
     const G4ParticleDefinition& aParticleType) {
   if (aParticleType.GetParticleName() == "opticalphoton") return false;
+  if (aParticleType.GetParticleName() == "S1Photon") return false;
   if (aParticleType.IsShortLived()) return false;
-  if (aParticleType.GetParticleName() == "thermalelectron") return false;
+  if (aParticleType.GetParticleName() == "ie-") return false;
   // if(abs(aParticleType.GetPDGEncoding())==2112 || //neutron (no E-dep.)
   return true;
 }

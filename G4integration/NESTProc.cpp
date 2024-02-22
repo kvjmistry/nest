@@ -43,6 +43,7 @@
 #include "G4UserLimits.hh"
 #include "G4Version.hh"  //tells you what Geant4 version you are running
 #include "NESTStackingAction.hh"
+#include "NESTS1Photon.hh"
 
 using namespace NEST;
 
@@ -79,7 +80,7 @@ G4Track* NESTProc::MakePhoton(G4ThreeVector xyz, double t) {
         eV;
 
   G4DynamicParticle* aQuantum =
-      new G4DynamicParticle(G4OpticalPhoton::OpticalPhoton(), photonMomentum);
+      new G4DynamicParticle(NESTS1Photon::OpticalPhoton(), photonMomentum);
   aQuantum->SetPolarization(photonPolarization.x(), photonPolarization.y(),
                             photonPolarization.z());
   aQuantum->SetKineticEnergy(sampledEnergy);
@@ -132,6 +133,9 @@ void NESTProc::TryPopLineages(const G4Track& aTrack, const G4Step& aStep) {
               ->xyz;
       double efield_here =
           fDetector->FitEF(maxHit_xyz.x(), maxHit_xyz.y(), maxHit_xyz.z());
+
+      std::cout << "NEST, the E field is: "<< efield_here << std::endl;
+
       lineage.result = fNESTcalc->FullCalculation(
           lineage.type, etot, lineage.density, efield_here, lineage.A,
           lineage.Z, default_NRYieldsParam, default_NRERWidthsParam,
@@ -210,6 +214,8 @@ void NESTProc::TryPopLineages(const G4Track& aTrack, const G4Step& aStep) {
 
 G4VParticleChange* NESTProc::AtRestDoIt(const G4Track& aTrack,
                                         const G4Step& aStep) {
+  std::cout << "NEST: The particle is at rest!"<< std::endl;
+  // PostStepDoIt(aTrack, aStep);
   pParticleChange->Initialize(aTrack);
   return G4VRestDiscreteProcess::AtRestDoIt(aTrack, aStep);
 }
@@ -499,7 +505,7 @@ NESTThermalElectron* NESTThermalElectron::theInstance = 0;
 
 NESTThermalElectron* NESTThermalElectron::Definition() {
   if (theInstance != 0) return theInstance;
-  const G4String name = "thermalelectron";
+  const G4String name = "ie-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);

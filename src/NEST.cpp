@@ -890,6 +890,12 @@ YieldResult NESTcalc::GetYieldIon(
   else {
     recombProb = 0.0;
   }
+
+  // TURN OFF RECOMBINATION FOR ALPHAS IN THE GAS
+  recombProb = 0.0;
+
+
+
   double Nph = Nq * NexONi / (1. + NexONi) + recombProb * Ni;
   double Ne = Nq - Nph;
   if (ValidityTests::nearlyEqual(A1, 206.) &&
@@ -1032,6 +1038,10 @@ YieldResult NESTcalc::GetYieldBeta(double energy, double density,
                                    double dfield) {  // OLD
   Wvalue wvalue = WorkFunction(density, fdetector->get_molarMass(),
                                fdetector->get_OldW13eV());
+
+
+  std::cout << "NEST: Beta calculation!"<< std::endl;
+
   double Qy, Nq;
   double Wq_eV = wvalue.Wq_eV;
   // double alpha = wvalue.alpha; // duplicate definition below. We don't even
@@ -1211,6 +1221,7 @@ YieldResult NESTcalc::GetYields(INTERACTION_TYPE species, double energy,
       // return GetYieldNROld ( energy, 1 );
       break;
     case ion:
+      std::cout << "NEST: Alpha calculation!"<< std::endl;
       return GetYieldIon(energy, density, dfield, massNum, atomNum,
                          NRYieldsParam);
       break;
